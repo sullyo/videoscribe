@@ -1,20 +1,19 @@
-import { NavItem } from "@/types/nav"
+import { NavItem } from "@/types/nav";
 
 interface SiteConfig {
-  name: string
-  description: string
-  mainNav: NavItem[]
+  name: string;
+  description: string;
+  mainNav: NavItem[];
   links: {
-    twitter: string
-    github: string
-    docs: string
-  }
+    twitter: string;
+    github: string;
+  };
 }
 
 export const siteConfig: SiteConfig = {
-  name: "Next.js",
+  name: "videoscribe",
   description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+    "Transcribe any Youtube video for free with OpenAI's whisper API",
   mainNav: [
     {
       title: "Home",
@@ -22,8 +21,7 @@ export const siteConfig: SiteConfig = {
     },
   ],
   links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
-    docs: "https://ui.shadcn.com",
+    twitter: "https://twitter.com/sullyo",
+    github: "https://github.com/sullyo/videoscribe",
   },
-}
+};
