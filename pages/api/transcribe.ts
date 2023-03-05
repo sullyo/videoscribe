@@ -1,28 +1,25 @@
 import fs from "fs";
+import type { NextApiRequest, NextApiResponse } from "next";
 import ytdl from "ytdl-core";
 
-const handler = async (req: Request): Promise<Response> => {
+import { OpenAITranscriber } from "@/lib/openai";
+
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { videoUrl, apiKey } = (await req.json()) as {
-      videoUrl: string;
-      apiKey: string;
-    };
-    const file = ytdl(videoUrl).pipe(fs.createWriteStream("video.mp4"));
+    const { videoUrl, apiKey } = req.body;
 
-    const res = await fetch("https://api.openai.com/v1/audio/transcriptions", {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      method: "POST",
-      body: JSON.stringify({
-        model: "whisper-1",
-        file: "rew",
-        response_format: "srt",
-      }),
+    const videoInfo = await ytdl.getInfo(videoUrl as string);
+    const videoFormat = ytdl.chooseFormat(videoInfo.formats, {
+      quality: "highest",
     });
+    const response = await fetch(videoFormat.url);
+    const blob = await response.blob();
+    const file = new File([blob], `${videoInfo.videoDetails.title}.mp4`, {
+      type: "video/mp4",
+    });
+    const text = await OpenAITranscriber(file, apiKey);
 
-    return new Response(JSON.stringify({ stuff: "lol" }), { status: 200 });
+    return new Response(JSON.stringify({ text }), { status: 200 });
   } catch (error) {
     console.error(error);
     return new Response("Error", { status: 500 });

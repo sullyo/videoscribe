@@ -7,13 +7,14 @@ interface SiteConfig {
   links: {
     twitter: string;
     github: string;
+    video: string;
+    youtube: string;
   };
 }
 
 export const siteConfig: SiteConfig = {
   name: "videoscribe",
-  description:
-    "Transcribe any Youtube video for free with OpenAI's whisper API",
+  description: "Transcribe any video for free with OpenAI's whisper API",
   mainNav: [
     {
       title: "Home",
@@ -23,5 +24,7 @@ export const siteConfig: SiteConfig = {
   links: {
     twitter: "https://twitter.com/sullyo",
     github: "https://github.com/sullyo/videoscribe",
+    video: "/video",
+    youtube: "/youtube",
   },
 };

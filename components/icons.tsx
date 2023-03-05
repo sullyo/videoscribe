@@ -1,19 +1,25 @@
 import {
   Laptop,
+  LucideFileDown,
   LucideProps,
   Moon,
+  Settings2Icon,
   SunMedium,
   Twitter,
+  UploadCloud,
   type Icon as LucideIcon,
-} from "lucide-react"
+} from "lucide-react";
 
-export type Icon = LucideIcon
+export type Icon = LucideIcon;
 
 export const Icons = {
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
   twitter: Twitter,
+  upload: UploadCloud,
+  download: LucideFileDown,
+  settings: Settings2Icon,
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path
@@ -30,4 +36,4 @@ export const Icons = {
       ></path>
     </svg>
   ),
-}
+};
