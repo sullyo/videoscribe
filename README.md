@@ -1,4 +1,4 @@
-# Video Scribe
+# Videoscribe
 
 Transcribe your videos using OpenAI's whisper api.
 
@@ -21,6 +21,10 @@ This project was boostrapped using this [template](https://ui.shadcn.com/)
 ### Usage
 
 Simply add your api key, then select whether you want to transcribe a youtube video or your own file. Note: you will be charged based on OpenAI's pricing found [here](https://openai.com/pricing)
+
+### Additional notes
+
+I tried to make this as simple as possible, so yes, there could be several improvements, specifically in making the components more reusable.
 
 ## License
 

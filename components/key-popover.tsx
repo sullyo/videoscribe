@@ -2,9 +2,7 @@
 
 import { apiKeyAtom } from "@/atoms";
 import { useAtom } from "jotai";
-import { Settings2 } from "lucide-react";
 
-import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
