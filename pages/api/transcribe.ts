@@ -1,25 +1,36 @@
 import fs from "fs";
 import type { NextApiRequest, NextApiResponse } from "next";
+import FormData from "form-data";
+import fetch from "node-fetch";
 import ytdl from "ytdl-core";
-
-import { OpenAITranscriber } from "@/lib/openai";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { videoUrl, apiKey } = req.body;
+    const { videoUrl, apiKey, format } = req.body;
 
-    const videoInfo = await ytdl.getInfo(videoUrl as string);
-    const videoFormat = ytdl.chooseFormat(videoInfo.formats, {
-      quality: "highest",
-    });
-    const response = await fetch(videoFormat.url);
-    const blob = await response.blob();
-    const file = new File([blob], `${videoInfo.videoDetails.title}.mp4`, {
-      type: "video/mp4",
-    });
-    const text = await OpenAITranscriber(file, apiKey);
+    const fileStream = ytdl(videoUrl).pipe(fs.createWriteStream("output.mp4"));
 
-    return new Response(JSON.stringify({ text }), { status: 200 });
+    await new Promise((resolve) => {
+      fileStream.on("finish", resolve);
+    });
+    const form = new FormData();
+    form.append("file", fs.createReadStream("output.mp4"));
+    form.append("model", "whisper-1");
+    form.append("response_format", format);
+
+    const response = await fetch(
+      "https://api.openai.com/v1/audio/transcriptions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: form,
+      }
+    );
+    const data = await response.text();
+
+    return new Response(JSON.stringify(data), { status: 200 });
   } catch (error) {
     console.error(error);
     return new Response("Error", { status: 500 });

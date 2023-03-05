@@ -10,45 +10,6 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function IndexPage() {
-  const [apiKey, setApiKey] = useState("");
-  const [videoUrl, setVideoUrl] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [transcription, setTranscription] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-
-  const handleDownload = async () => {
-    const response = await fetch("/api/download", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ videoUrl }),
-    });
-
-    const buffer = await response.arrayBuffer();
-    const blob = new Blob([buffer], { type: "audio/mpeg" });
-    const filename = response.headers
-      .get("Content-Disposition")
-      ?.split("filename=")[1];
-    setFile(new File([blob], filename || ""));
-  };
-
-  const handleTranscribe = async () => {
-    if (!apiKey) {
-      alert("Please enter an API key.");
-      return;
-    }
-    setLoading(true);
-    const transcriptionResponse = await fetch("/api/transcribe", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ apiKey, videoUrl }),
-    });
-    const transcription = await transcriptionResponse.json();
-    setTranscription(transcription);
-    setLoading(false);
-  };
-
   return (
     <Layout>
       <Head>
@@ -70,16 +31,7 @@ export default function IndexPage() {
             OpenAi API key and you're good to go.
           </p>
         </div>
-        {/* <Input
-          type="text"
-          placeholder="Api Key"
-          onChange={(e) => setApiKey(e.target.value)}
-        />
-        <Input
-          type="text"
-          placeholder="Youtube video URL"
-          onChange={(e) => setVideoUrl(e.target.value)}
-        /> */}
+
         <div className="flex justify-center gap-4">
           <Link href={siteConfig.links.video} className={buttonVariants()}>
             Upload your own file
@@ -91,10 +43,6 @@ export default function IndexPage() {
             Youtube Url
           </Link>
         </div>
-        {/* <Button onClick={() => handleTranscribe()}>Try now</Button>
-        <Button onClick={handleDownload}>Download Audio</Button>
-        {file && <p>Downloaded file: {file.name}</p>}
-        <p>{transcription}</p> */}
       </section>
     </Layout>
   );
