@@ -1,8 +1,7 @@
 import { randomUUID } from "crypto";
 import fs from "fs";
 import type { NextApiRequest, NextApiResponse } from "next";
-import FormData from "form-data";
-import fetch from "node-fetch";
+import fetch, { FormData, fileFromSync } from "node-fetch";
 import ytdl from "ytdl-core";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -23,7 +22,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     try {
       const form = new FormData();
-      form.append("file", fs.createReadStream(outputFile));
+      const mimetype = "audio/mp4";
+      const file = fileFromSync(outputFile, mimetype);
+      form.append("file", file);
       form.append("model", "whisper-1");
       form.append("response_format", format);
 
