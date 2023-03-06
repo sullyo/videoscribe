@@ -7,11 +7,11 @@ import ytdl from "ytdl-core";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
-    const outputFile = `${randomUUID()}.mp4`;
+    const outputFile = `/tmp/${randomUUID()}.mp4`;
     const { videoUrl, apiKey, format } = req.body;
     try {
       const fileStream = ytdl(videoUrl, {
-        quality: "lowest",
+        quality: "140",
       }).pipe(fs.createWriteStream(outputFile));
 
       await new Promise((resolve) => {
